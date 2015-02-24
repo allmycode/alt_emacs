@@ -1,0 +1,120 @@
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+
+(when (not package-archive-contents)
+  (package-refresh-contents))
+
+(if (not (package-installed-p 'req-package))
+    (package-install 'req-package))
+
+(require 'req-package)
+
+;; KEYBINDINGS
+;; eshell or switch to it if it's active.
+(global-set-key (kbd "C-x m") 'eshell)
+
+;; Start a new eshell even if one is active.
+(global-set-key (kbd "C-x M") (lambda () (interactive) (eshell t)))
+
+;; Start a regular shell if you prefer that.
+(global-set-key (kbd "C-x C-m") 'shell)
+
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
+
+;; PREFERENCES
+(if (equal user-login-name "cloud")
+    (progn 
+      (add-to-list 'default-frame-alist '(font . "Courier New-16"))
+      (add-to-list 'default-frame-alist '(fullscreen . maximized))
+      (load-theme 'tango-dark)
+      ))
+
+(if (equal user-login-name "lyaksta")
+    (progn
+      (add-to-list 'default-frame-alist '(font . "Courier New-12"))
+      (add-to-list 'default-frame-alist '(fullscreen . maximized))
+      (load-theme 'tango-dark)))
+
+;; Disable toobar
+(tool-bar-mode 0)
+
+;; Disable prompts: get rid of yes or no and replace it with y or n
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; ESHELL
+(message "Adding `emacs'")
+(defun eshell/emacs (file)
+  (find-file file))
+
+;; HELM
+(req-package helm
+  :config
+  (progn 
+    (helm-mode 1)
+
+    (global-set-key (kbd "C-x b") 'helm-buffers-list)
+    (global-set-key (kbd "M-x") 'helm-M-x)
+
+    ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+    ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
+    ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
+    (global-set-key (kbd "C-c h") 'helm-command-prefix)
+    (global-unset-key (kbd "C-x c"))
+
+    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+    (define-key helm-map (kbd "C-z")  'helm-select-action))) ; list actions using C-z
+
+;; DIRED-MODE
+(req-package dired
+  :config
+  (progn
+     (message "Loading dired hooks")
+     (message "ALT dired-mode: Setting [z] to (`find-alternate-file' \"..\") ")
+     (define-key dired-mode-map (kbd "z") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+     ))
+
+;; NXML-MODE
+(req-package nxml-mode
+  :config
+  (progn
+     (message "Loading nxml hooks")
+     
+     (setq nxml-sexp-element-flag t)
+     ;; start kdb marco for nxml mode
+     (fset 'close-xml-tag
+	   [?\C-c ?\C-f ?\C-a return up tab])
+     ;; end kdb macro for nxml-mode
+     (message "ALT nxml-mode: Setting C-c C-g to `close-xml-tag'")
+     (define-key nxml-mode-map (kbd "C-c C-g") 'close-xml-tag)))
+
+(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+
+(req-package clojure-mode
+  :init
+  (add-hook 'clojure-mode-hook 'show-paren-mode))
+
+; https://github.com/clojure-emacs/cider
+(req-package cider
+  :require paredit
+  :init
+  (progn
+    (add-hook 'cider-mode-hook 'rainbow-delimiter-mode)
+    (add-hook 'cider-mode-hook 'paredit-mode)))
+
+; http://www.emacswiki.org/emacs/RainbowDelimiters
+(req-package rainbow-delimiters
+  :init
+  (progn
+    (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
+    (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
+
+(req-package paredit
+  :init
+  (progn
+   (add-hook 'clojure-mode-hook 'paredit-mode)
+   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)))
+
+(req-package-finish)
