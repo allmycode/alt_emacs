@@ -50,13 +50,16 @@
 
 ;; HELM
 (req-package helm
+  :require helm-config
   :config
   (progn 
     (helm-mode 1)
 
     (global-set-key (kbd "C-x b") 'helm-buffers-list)
+    (global-set-key (kbd "C-x C-r") 'helm-mini)
     (global-set-key (kbd "M-x") 'helm-M-x)
-
+    (global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
+    
     ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
     ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
     ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
@@ -78,6 +81,8 @@
 
 ;; NXML-MODE
 (req-package nxml-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.html\\'" . nxml-mode))
   :config
   (progn
      (message "Loading nxml hooks")
