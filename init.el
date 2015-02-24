@@ -23,20 +23,6 @@
 
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
-;; PREFERENCES
-(if (equal user-login-name "cloud")
-    (progn 
-      (add-to-list 'default-frame-alist '(font . "Courier New-16"))
-      (add-to-list 'default-frame-alist '(fullscreen . maximized))
-      (load-theme 'tango-dark)
-      ))
-
-(if (equal user-login-name "lyaksta")
-    (progn
-      (add-to-list 'default-frame-alist '(font . "Courier New-12"))
-      (add-to-list 'default-frame-alist '(fullscreen . maximized))
-      (load-theme 'tango-dark)))
-
 ;; Disable toobar
 (tool-bar-mode 0)
 
@@ -123,3 +109,17 @@
    (add-hook 'emacs-lisp-mode-hook 'paredit-mode)))
 
 (req-package-finish)
+
+;; PREFERENCES
+(if (equal user-login-name "cloud")
+    (progn 
+      (add-to-list 'default-frame-alist '(font . "Courier New-16"))
+      (add-to-list 'default-frame-alist '(fullscreen . maximized))
+      (load-theme 'tango-dark)
+      ))
+
+(if (equal user-login-name "lyaksta")
+    (progn
+      (add-to-list 'default-frame-alist '(font . "Courier New-12"))
+      (add-to-list 'default-frame-alist '(fullscreen . maximized))
+      (load-theme 'tango-dark)))
