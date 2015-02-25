@@ -11,6 +11,9 @@
 
 (require 'req-package)
 
+;; home direcotyr should be default
+(setq default-directory "~/")
+
 ;; KEYBINDINGS
 ;; eshell or switch to it if it's active.
 (global-set-key (kbd "C-x m") 'eshell)
