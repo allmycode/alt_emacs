@@ -95,7 +95,7 @@
   :require paredit
   :init
   (progn
-    (add-hook 'cider-mode-hook 'rainbow-delimiter-mode)
+    (add-hook 'cider-mode-hook 'rainbow-delimiters-mode)
     (add-hook 'cider-mode-hook 'paredit-mode)))
 
 ; http://www.emacswiki.org/emacs/RainbowDelimiters
