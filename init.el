@@ -1,3 +1,5 @@
+(setq package-check-signature nil)
+
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
@@ -102,14 +104,7 @@
 (req-package rainbow-delimiters
   :init
   (progn
-    (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)))
-
-(req-package paredit
-  :init
-  (progn
-   (add-hook 'clojure-mode-hook 'paredit-mode)
-   (add-hook 'emacs-lisp-mode-hook 'paredit-mode)))
+    (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)))
 
 (req-package-finish)
 
@@ -125,4 +120,14 @@
     (progn
       (add-to-list 'default-frame-alist '(font . "Courier New-12"))
       (add-to-list 'default-frame-alist '(fullscreen . maximized))
-      (load-theme 'tango-dark)))
+      (load-theme 'tango-dark)
+      
+      (setq comint-completion-addsuffix (quote ("\\" . " ")))
+      
+      (defun a2 (component) "Starts abFX2 component in shell buffer" (interactive "sComponent name: ")
+	     (save-excursion
+	       (set-buffer (shell (concat "*" component "*")))
+	       (insert (concat "a2 start " component))
+	       (comint-send-input)))))
+
+
