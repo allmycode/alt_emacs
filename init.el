@@ -121,10 +121,8 @@
       
       (setq comint-completion-addsuffix (quote ("\\" . " ")))
       
-      (defun a2 (component) "Starts abFX2 component in shell buffer" (interactive "sComponent name: ")
-	     (save-excursion
-	       (set-buffer (shell (concat "*" component "*")))
-	       (insert (concat "a2 start " component))
-	       (comint-send-input)))))
+      (load-file "~/.emacs.d/abfx2.el")
+      )
 
 
+(put 'dired-find-alternate-file 'disabled nil)
