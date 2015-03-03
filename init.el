@@ -122,7 +122,7 @@
       (setq comint-completion-addsuffix (quote ("\\" . " ")))
       
       (load-file "~/.emacs.d/abfx2.el")
-      )
+      ))
 
 
 (put 'dired-find-alternate-file 'disabled nil)
