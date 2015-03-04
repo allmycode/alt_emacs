@@ -43,8 +43,7 @@
   (progn 
     (helm-mode 1)
 
-    (global-set-key (kbd "C-x b") 'helm-buffers-list)
-    (global-set-key (kbd "C-x C-r") 'helm-mini)
+    (global-set-key (kbd "C-x b") 'helm-mini)
     (global-set-key (kbd "M-x") 'helm-M-x)
     (global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
     
@@ -139,6 +138,8 @@
       (setq comint-completion-addsuffix (quote ("\\" . " ")))
       
       (load-file "~/.emacs.d/abfx2.el")
+
+      (load-file "~/.emacs.d/proxy.el")
       ))
 
 
