@@ -47,6 +47,7 @@
     (global-set-key (kbd "C-x b") 'helm-mini)
     (global-set-key (kbd "M-x") 'helm-M-x)
     (global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
+    (global-set-key (kbd "C-c h o") 'helm-occur)
     
     ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
     ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
