@@ -66,22 +66,21 @@
      (message "ALT dired-mode: Setting [z] to (`find-alternate-file' \"..\") ")
      (define-key dired-mode-map (kbd "z") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
 
-     (if (equal user-login-name "cloud")
-	 (defun dired-get-size ()
-	   (interactive)
-	   (let ((files (dired-get-marked-files)))
-	     (with-temp-buffer
-	       (apply 'call-process "/usr/bin/du" nil t nil "-sch" files)
-	       (switch-to-buffer (current-buffer))
-	       (message "Size of all marked files: %s"
-			(progn 
-			  (re-search-backward "\\(^ *[0-9.,]+[A-Za-z]+\\).*total$")
-			  (match-string 1))))))
-       
-       (define-key dired-mode-map (kbd "?") 'dired-get-size)
+     (when (equal user-login-name "cloud")
+	   (defun dired-get-size ()
+	     (interactive)
+	     (let ((files (dired-get-marked-files)))
+	       (with-temp-buffer
+		 (apply 'call-process "/usr/bin/du" nil t nil "-sch" files)
+		 (switch-to-buffer (current-buffer))
+		 (message "Size of all marked files: %s"
+			  (progn 
+			    (re-search-backward "\\(^ *[0-9.,]+[A-Za-z]+\\).*total$")
+			    (match-string 1))))))
+	   
+	   (define-key dired-mode-map (kbd "?") 'dired-get-size)
 
-       (load-file "~/.emacs.d/dired-compress.el")
-       )
+	   (load-file "~/.emacs.d/dired-compress.el"))
      ))
 
 ;; NXML-MODE
