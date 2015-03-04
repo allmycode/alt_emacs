@@ -123,6 +123,7 @@
 (req-package-finish)
 
 ;; PREFERENCES
+(toggle-frame-maximized)
 (if (equal user-login-name "cloud")
     (progn 
       (add-to-list 'default-frame-alist '(font . "Courier New-16"))
