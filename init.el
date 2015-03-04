@@ -143,3 +143,7 @@
 
 
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; Prettify mode to show lambda like λ
+;; http://ergoemacs.org/emacs/emacs_pretty_lambda.html
+(global-prettify-symbols-mode 1)
