@@ -123,6 +123,13 @@
   (progn
     (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)))
 
+(req-package org
+  :config
+  (progn
+    (global-set-key "\C-cl" 'org-store-link)
+    (global-set-key "\C-ca" 'org-agenda)
+    ))
+
 (req-package-finish)
 
 ;; PREFERENCES
