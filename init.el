@@ -128,6 +128,7 @@
   (progn
     (global-set-key "\C-cl" 'org-store-link)
     (global-set-key "\C-ca" 'org-agenda)
+    (setq org-log-done 'time)
     (when (equal user-login-name "lyaksta")
       (setq org-agenda-files (list "~/WORK.org"
 				   "~/my.org"))
