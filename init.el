@@ -1,4 +1,4 @@
-(setq package-check-signature nil)
+;;(setq package-check-signature nil)
 
 (require 'package)
 (add-to-list 'package-archives
@@ -8,22 +8,15 @@
 (when (not package-archive-contents)
   (package-refresh-contents))
 
-(if (not (package-installed-p 'req-package))
-    (package-install 'req-package))
+(if (not (package-installed-p 'use-package))
+    (package-install 'use-package))
 
-(require 'req-package)
-
+(require 'use-package)
+(require 'bind-key)
 ;; home direcotyr should be default
 (setq default-directory "~/")
 
-;; KEYBINDINGS
-;; eshell or switch to it if it's active.
-(global-set-key (kbd "C-x m") 'eshell)
-
-;; Start a regular shell if you prefer that.
-(global-set-key (kbd "C-x C-m") 'shell)
-
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(bind-key "C-x k" 'kill-this-buffer)
 
 ;; Disable toobar
 (tool-bar-mode 0)
@@ -36,34 +29,46 @@
 (defun eshell/emacs (file)
   (find-file file))
 
+(use-package solarized-theme
+  :ensure t
+  :init
+  (load-theme 'solarized-light t)
+  )
+
+(use-package shell
+  :bind ("C-x C-m" . shell)
+  )
+
+(use-package eshell
+  :bind ("C-x m" . eshell)
+  )
+
 ;; HELM
-(req-package helm
-  :require helm-config
-  :config
-  (progn 
-    (helm-mode 1)
-
-    (global-set-key (kbd "C-x C-f") 'helm-find-files)
-    (global-set-key (kbd "C-x b") 'helm-mini)
-    (global-set-key (kbd "M-x") 'helm-M-x)
-    (global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
-    (global-set-key (kbd "C-c h o") 'helm-occur)
-    
-    ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
-    ;; Changed to "C-c h". Note: We must set "C-c h" globally, because we
-    ;; cannot change `helm-command-prefix-key' once `helm-config' is loaded.
-    (global-set-key (kbd "C-c h") 'helm-command-prefix)
-    (global-unset-key (kbd "C-x c"))
-
-    (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-    (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-    (define-key helm-map (kbd "C-z")  'helm-select-action)  ; list actions using C-z
-    
-    (setq helm-M-x-fuzzy-match t) ;; optional fuzzy matching for helm-M-x
-    ))
+;(use-package helm
+;  :ensure t
+;  :init
+;  (progn
+;    (require 'helm-config)
+;    (bind-key "C-c h" 'helm-command-prefix)
+;    (unbind-key "C-x c")
+;    
+;    (bind-key "C-x C-f" 'helm-find-files)
+;    (bind-key "C-x b" 'helm-mini)
+;    (bind-key "M-x" 'helm-M-x)
+;    (bind-key "C-x r b" 'helm-filtered-bookmarks)
+;    (bind-key "C-c h o" 'helm-occur)
+;    )
+;  :config
+;  (progn 
+;    (helm-mode 1)
+;    (bind-key "<tab>" 'helm-execut-parsisten-action helm-map)
+;    (bind-key "C-i" 'helm-execut-parsisten-action helm-map)
+;    (bind-key "C-z" 'helm-select-action helm-map)
+;    )
+;  :defer t)
 
 ;; DIRED-MODE
-(req-package dired
+(use-package dired
   :config
   (progn
      (message "Loading dired hooks")
@@ -85,10 +90,11 @@
 	   (define-key dired-mode-map (kbd "?") 'dired-get-size)
 
 	   (load-file "~/.emacs.d/dired-compress.el"))
-     ))
+     )
+  :defer t)
 
 ;; NXML-MODE
-(req-package nxml-mode
+(use-package nxml-mode
   :init
   (add-to-list 'auto-mode-alist '("\\.html\\'" . nxml-mode))
   :config
@@ -101,29 +107,36 @@
 	   [?\C-c ?\C-f ?\C-a return up tab])
      ;; end kdb macro for nxml-mode
      (message "ALT nxml-mode: Setting C-c C-g to `close-xml-tag'")
-     (define-key nxml-mode-map (kbd "C-c C-g") 'close-xml-tag)))
+     (define-key nxml-mode-map (kbd "C-c C-g") 'close-xml-tag))
+  :defer t)
 
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
 
-(req-package clojure-mode
+(use-package clojure-mode
+  :ensure t
   :init
-  (add-hook 'clojure-mode-hook 'show-paren-mode))
+  (add-hook 'clojure-mode-hook 'show-paren-mode)
+  :defer t)
+
+(use-package paredit
+  :ensure t
+  :defer t)
 
 ; https://github.com/clojure-emacs/cider
-(req-package cider
-  :require paredit
+(use-package cider
+  :ensure t
   :init
   (progn
     (add-hook 'cider-mode-hook 'rainbow-delimiters-mode)
-    (add-hook 'cider-mode-hook 'paredit-mode)))
+    (add-hook 'cider-mode-hook 'paredit-mode))
+  :defer t)
 
 ; http://www.emacswiki.org/emacs/RainbowDelimiters
-(req-package rainbow-delimiters
+(use-package rainbow-delimiters
   :init
   (progn
-    (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode)))
-
-(req-package-finish)
+    (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
+  :defer t)
 
 ;; PREFERENCES
 (toggle-frame-maximized)
@@ -131,14 +144,12 @@
     (progn 
       (add-to-list 'default-frame-alist '(font . "Courier New-16"))
       (add-to-list 'default-frame-alist '(fullscreen . maximized))
-      (load-theme 'tango-dark)
       ))
 
 (if (equal user-login-name "lyaksta")
     (progn
       (add-to-list 'default-frame-alist '(font . "Courier New-12"))
       (add-to-list 'default-frame-alist '(fullscreen . maximized))
-      (load-theme 'tango-dark)
       
       (setq comint-completion-addsuffix (quote ("\\" . " ")))
       
