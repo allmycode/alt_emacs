@@ -138,6 +138,22 @@
     (add-hook 'clojure-mode-hook 'rainbow-delimiters-mode))
   :defer t)
 
+;(req-package org
+;  :config
+;  (progn
+;    (global-set-key "\C-cl" 'org-store-link)
+;    (global-set-key "\C-ca" 'org-agenda)
+;    (setq org-log-done 'time)
+;    (when (equal user-login-name "lyaksta")
+;      (setq org-agenda-files (list "~/WORK.org"
+;				   "~/my.org"))
+;      (add-to-list 'org-emphasis-alist
+;             '("*" (:foreground "red")
+;               )))
+;    ))
+;
+;(req-package-finish)
+
 ;; PREFERENCES
 (toggle-frame-maximized)
 (if (equal user-login-name "cloud")
